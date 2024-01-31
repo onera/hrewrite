@@ -111,7 +111,7 @@ Finally, in line 8, the function returns `True` to signal the rewriting engine t
 
 The last rewriting rule gives the semantics of `plus` on two python numbers, and its implementation is similar to the one for the semantics of `s`.
 
-**Note** that bny default, the *hrewrite* python library stores the normal form of a term.
+**Note** that by default, the *hrewrite* python library stores the normal form of a term.
 Hence, if one adds new rewriting rules after having computed the normal form of some terms,
  these normal forms may not be correct anymore.
 This is typically the case here where we computed `five`.
@@ -147,8 +147,8 @@ Line 5 gives the semantics of `tail`: the pattern of the rule is the same of the
 
 The concatenation of two lists is also relatively simple to express:
 ```python
-concat = hrw.constructor("concat", hrw.free("list list") >> "list")
-lgamma = hrw.vars("Nat*")
+concat = hrw.constructor("concat", hrw.free("List List") >> "List")
+lgamma = hrw.var("Nat*")
 rw_eng.add(concat(tlist(lbeta), tlist(lgamma)), tlist(lbeta, lgamma))
 ```
 The rewriting rule in line 3 simply puts the content of the first list in `lbeta`, the content of the second list in `lgamma`,
@@ -160,12 +160,12 @@ This example is taken from [[2]](#2) which presents a `ParentBook` describing XM
 In this example we have two kind of persons, `female` and `male`, and a `ParentBook` is a list of such persons:
 ```python
 hrw.sorts("FPerson", "MPerson", "ParentBook")
-parentbook = krw.constructor("parentbook", hrw.free("(FPerson | MPerson)*") >> "ParentBook")
+parentbook = hrw.constructor("parentbook", hrw.free("(FPerson | MPerson)*") >> "ParentBook")
 ```
 Then a person, independently to the gender, has a name, a list of children, and an arbitrary number of phone numbers and emil addresses:
 ```python
 hrw.sorts("Name", "Children", "Tel", "Email", "Kind", "Number")
-name, children, tel, email, fperson, mperson, home, work, number = krw.constructors(
+name, children, tel, email, home, work, number, fperson, mperson = hrw.constructors(
   # content of a person
   name = hrw.lit() >> "Name",
   children = hrw.free("(FPerson | MPerson)*") >> "Children",
@@ -181,7 +181,7 @@ name, children, tel, email, fperson, mperson, home, work, number = krw.construct
 )
 ```
 Here, we first declare the sorts for the different elements construction a person,
- and then use the function `krw.constructors` to declare several term constructors in on call:
+ and then use the function `hrw.constructors` to declare several term constructors in on call:
  `name` contains a string, and so we decaled it as a literal;
  `children` simply wraps a list of persons;
  `tel` has a mandatory number and an optional kind;

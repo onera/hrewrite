@@ -258,7 +258,7 @@ public:
       return py::make_tuple(0, t_inner.get_spec().get_regexp());
     } else {
       constexpr std::size_t idx = t_term_full::template sterm_index_v<t_core>;
-      using th = typename t_ctx_th::template theory_element_t<idx>; // ok this is indeed the theory
+      // using th = typename t_ctx_th::template theory_element_t<idx>; // ok this is indeed the theory
       return py::make_tuple(idx+1, std::tuple_element_t<idx, th_wrappers>::th_factory::dumps(t_inner, this->m_transfert));
     }
   }

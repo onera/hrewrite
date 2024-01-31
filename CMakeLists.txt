@@ -144,12 +144,13 @@ endif()
 # C++ LIBRARY
 set(LIBRARY_NAME ${PROJECT_NAME}_lib)
 add_library(${LIBRARY_NAME} INTERFACE)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME}_lib) # create alias
 # target_include_directories(${LIBRARY_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/${PROJECT_NAME})
 target_include_directories(${LIBRARY_NAME} INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 )
-# Install includes
+# install includes
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/${PROJECT_NAME}
   DESTINATION include
   FILES_MATCHING
@@ -217,8 +218,13 @@ endif()
 
 if (ENABLE_PYTHON)
   set(PYTHON_TEST_NAME ${PROJECT_NAME}_python_test)
-  set(pytest_cmd ${Python_EXECUTABLE} -u -m pytest --rootdir=${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/tests_python -ra -v -s)
 
+  # create symlink to the compiled library
+  add_test(
+    NAME ${PYTHON_TEST_NAME}_symlink
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_BINARY_DIR}/lib${PROJECT_NAME}_python.so ${PROJECT_SOURCE_DIR}/python/lib${PROJECT_NAME}_python.so)
+  # actual test
+  set(pytest_cmd ${Python_EXECUTABLE} -u -m pytest --rootdir=${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/tests_python -ra -v -s)
   if (ENABLE_COVERAGE)
     set(pytest_cmd coverage run -m ${pytest_cmd})
   endif()

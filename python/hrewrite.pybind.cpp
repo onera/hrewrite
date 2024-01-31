@@ -25,8 +25,8 @@
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
+#include <type_traits>
 
-#define PYBIND11_DETAILED_ERROR_MESSAGES 1
 #include <pybind11/pybind11.h>
 
 #include "python/hrewrite.pybind.hpp"
@@ -104,7 +104,7 @@ struct th_api_free {
 
 struct pyobj_hash {
   using value_type = py::object;
-  std::size_t operator()(py::object const obj) const { return obj.attr("__hash__")().cast<std::size_t>(); }
+  std::size_t operator()(py::object const obj) const { return static_cast<std::size_t>(obj.attr("__hash__")().cast<std::make_signed_t<std::size_t>>()); }
 };
 struct pyobj_eq {
   using value_type = py::object;

@@ -277,14 +277,14 @@ namespace hrw {
   struct tt_term_full_match_backtrack_content {
     tt_term_full_match_backtrack_content(t_data & data, t_rw * rw, t_guard<t_rw, t_substitution> & guard): m_data(data), m_rw(rw), m_guard(guard) {}
     t_data & m_data;
-    t_guard<t_rw, t_substitution> & m_guard;
     t_rw * m_rw;
+    t_guard<t_rw, t_substitution> & m_guard;
   };
   template<typename t_rw, typename t_substitution>
   struct tt_term_full_match_backtrack_content<void, t_rw, t_substitution> {
     tt_term_full_match_backtrack_content(t_rw * rw, t_guard<t_rw, t_substitution> & guard): m_rw(rw), m_guard(guard) {}
-    t_guard<t_rw, t_substitution> & m_guard;
     t_rw * m_rw;
+    t_guard<t_rw, t_substitution> & m_guard;
   };
   template<typename t_data, typename t_substitution>
   struct tt_term_full_match_backtrack_content<t_data, void, t_substitution> {
